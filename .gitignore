@@ -1,0 +1,15 @@
+dist/
+*.egg-info/
+MANIFEST
+*.pyc
+*.sql*
+*.pickled
+.idea
+nohup.out
+.ipynb_checkpoints/
+*.old
+*.bak
+*.orig
+*.old.*
+*.bak.*
+*.orig.*

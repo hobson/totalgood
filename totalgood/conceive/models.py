@@ -109,7 +109,7 @@ class Contributor(BaseModel):
     @property
     def dropbox_valid(self):
         return self.dropbox_access_token and self.dropbox_user_id
-    
+
     @property
     def dayone_valid(self):
         return self.dropbox_valid and self.dropbox_dayone_folder_path
@@ -121,7 +121,7 @@ class Contributor(BaseModel):
     @property
     def twitter_valid(self):
         return self.twitter_api_secret and self.twitter_api_key and self.twitter_account_name
-    
+
     @property
     def facebook_valid(self):
         return self.facebook_api_key and self.facebook_account_name
@@ -133,7 +133,7 @@ class Contributor(BaseModel):
     @property
     def redirects(self):
         return self.redirect_set.order_by("old_url").all()
-    
+
     def __unicode__(self):
         return "%s" % self.name
 
@@ -181,7 +181,7 @@ class AbstractConcept(BaseModel):
     longitude = models.FloatField(blank=True, null=True)
     location_name = models.CharField(max_length=255, blank=True, null=True, editable=False)
     time_zone_string = models.CharField(max_length=255, blank=True, null=True, editable=False)
-    
+
     weather_temp_f = models.IntegerField(blank=True, null=True)
     weather_temp_c = models.IntegerField(blank=True, null=True)
     weather_description = models.CharField(max_length=255, blank=True, null=True, editable=False)
@@ -366,7 +366,7 @@ class Concept(AbstractConcept):
         # if make_revision:
         #     cleaned_body = self.body.replace("<br/>", "\n").replace("<br>", "\n").replace("</div>", "\n")
         #     cleaned_body = ENTITY_REGEX.sub(" ", cleaned_body)
-            
+
         self.sort_datetime = self.date
         super(Concept, self).save(*args, **kwargs)
 
@@ -472,7 +472,7 @@ class ConceptImage(BaseModel):
             resave = True
 
         super(ConceptImage, self).save(*args, **kwargs)
-        
+
         if resave:
             self.image_url = self.image.url.split("?")[0]
             self.thumb_size_url = get_thumbnail(self.image, '100x100', crop="center", quality=75).url.split("?")[0]
@@ -524,7 +524,7 @@ class Redirect(BaseModel):
 #     print sender
 #     print kwargs
 #     if created and not Author.objects.filter(user=instance).count() > 0:
-        
+
 #         Author.objects.create(user=instance)
 
 # post_save.connect(create_user_profile, sender=User, dispatch_uid="create_user_profile")
