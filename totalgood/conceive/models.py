@@ -14,6 +14,23 @@ from utils.slughifi import unique_slug, slughifi
 from main_site.models import BaseModel
 
 
+class DatedModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    area = models.CharField(max_length=255, blank=True, null=True,)
+    country = models.CharField(max_length=255, blank=True, null=True,)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    time_zone = models.CharField(max_length=255, blank=True, null=True, editable=False)
+
+
 class Contributor(BaseModel):
     user = models.ForeignKey(User, blank=True, null=True)
     premium_user = models.BooleanField(default=False)
@@ -51,7 +68,7 @@ class Contributor(BaseModel):
 
     def save(self, *args, **kwargs):
         if not self.archive and not self.user:
-            raise Exception("user is missing, and author is not an archive")
+            raise RuntimeError("user is missing, and author is not an archive")
         self.slug = unique_slug(self, 'name', 'slug')
         super(Author, self).save(*args, **kwargs)
 
@@ -104,7 +121,7 @@ class Contributor(BaseModel):
 
     @property
     def start_date(self):
-        return self.created_at
+        return self.created
 
     @property
     def dropbox_valid(self):
@@ -174,13 +191,7 @@ class AbstractConcept(BaseModel):
     dayone_image_blog_size_url = models.TextField(blank=True, null=True)
     dayone_image_thumb_size_url = models.TextField(blank=True, null=True)
 
-
-    location_area = models.CharField(max_length=255, blank=True, null=True,)
-    location_country = models.CharField(max_length=255, blank=True, null=True,)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
-    location_name = models.CharField(max_length=255, blank=True, null=True, editable=False)
-    time_zone_string = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    location = ForeignKey(Location, null=True)
 
     weather_temp_f = models.IntegerField(blank=True, null=True)
     weather_temp_c = models.IntegerField(blank=True, null=True)
