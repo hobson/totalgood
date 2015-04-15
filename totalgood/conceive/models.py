@@ -31,6 +31,31 @@ class Location(models.Model):
     time_zone = models.CharField(max_length=255, blank=True, null=True, editable=False)
 
 
+class Weather(models.Model):
+    """Weather conditions as recorded hourly on wunderground.org
+
+    The fields of this model should roughly correspond to the columns of data
+    returned by wunderground.org and the pug.ann.data.weather module:
+
+        fields = pug.ann.data.weather.hourly(location, days=1).columns
+
+    Units are converted to SI (metric) before storage in the db.
+    """
+
+    temp = models.FloatField(
+        blank=True, null=True,
+        help_text='Current outdoor (shaded) temperature (float, deg C)')
+    condition = models.CharField(
+        max_length=255, blank=True, null=True, editable=False,
+        help_text='Short weather condition description (str, categorical)')
+    icon = models.CharField(max_length=255, blank=True, null=True, editable=False)
+    pressure_mmm = models.IntegerField(blank=True, null=True)
+    relative_humidity = models.IntegerField(blank=True, null=True)
+    wind_bearing = models.IntegerField(blank=True, null=True)
+    wind_chill_c = models.IntegerField(blank=True, null=True)
+    wind_speed_kph = models.IntegerField(blank=True, null=True)
+
+
 class Contributor(BaseModel):
     user = models.ForeignKey(User, blank=True, null=True)
     premium_user = models.BooleanField(default=False)
@@ -193,15 +218,8 @@ class AbstractConcept(BaseModel):
 
     location = ForeignKey(Location, null=True)
 
-    weather_temp_f = models.IntegerField(blank=True, null=True)
-    weather_temp_c = models.IntegerField(blank=True, null=True)
-    weather_description = models.CharField(max_length=255, blank=True, null=True, editable=False)
-    weather_icon = models.CharField(max_length=255, blank=True, null=True, editable=False)
-    weather_pressure = models.IntegerField(blank=True, null=True)
-    weather_relative_humidity = models.IntegerField(blank=True, null=True)
-    weather_wind_bearing = models.IntegerField(blank=True, null=True)
-    weather_wind_chill_c = models.IntegerField(blank=True, null=True)
-    weather_wind_speed_kph = models.IntegerField(blank=True, null=True)
+    weather = ForeignKey(Weather, null=True) 
+
 
     twitter_publish_intent = models.BooleanField(default=True)
     twitter_include_image = models.BooleanField(default=True)
