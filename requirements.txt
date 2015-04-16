@@ -55,10 +55,7 @@ paramiko==1.15.2
 Pillow==2.8.1
 progressbar2==2.7.3
 psycopg2==2.6
-pug-ann==0.0.21
-pug-nlp==0.0.18
 pyasn1==0.1.7
-PyBrain==0.3.4
 pycparser==2.10
 pycrypto==2.6.1
 pyembed==1.1.2
@@ -91,3 +88,5 @@ Unidecode==0.4.16
 urllib3==1.10.2
 versiontools==1.9.1
 xlrd==0.9.3
+pug-ann
+pug-nlp
