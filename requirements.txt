@@ -1,17 +1,18 @@
 #$ sudo yum install -y readline-devel libmemcached libmemcached-devel
-amqp==1.4.6
-anyjson==0.3.3
-BeautifulSoup==3.2.1
-beautifulsoup4==4.3.2
+## amqp==1.4.6
+## anyjson==0.3.3
+# conda install beautiful-soup
+# BeautifulSoup==3.2.1
+## beautifulsoup4==4.3.2
 billiard==3.3.0.19
-bleach==1.4.1
+# bleach==1.4.1
 boto==2.38.0
 celery==3.1.17
-Django==1.8
-django-allauth==0.19.1
-django-analytical==0.20.0
-django-annoying==0.8.1
-django-appconf==1.0.1
+Django>=1.8
+django-allauth>=0.19.1
+django-analytical>=0.20.0
+django-annoying>=0.8.1
+django-appconf>=1.0.1
 django-celery==3.1.16
 django-celery-with-redis==3.0
 django-compressor==1.4
@@ -48,7 +49,7 @@ psycopg2==2.6
 pycrypto==2.6.1
 pyembed==1.1.2
 pyembed-markdown==1.1.0
-pylibmc==1.4.2
+# pylibmc==1.4.2
 pyOpenSSL==0.14
 python-oembed==0.2.2
 python-openid==2.2.5
@@ -61,7 +62,7 @@ requests-oauthlib==0.4.2
 # selenium==2.45.0
 six==1.9.0
 sorl-thumbnail==12.2
-South==1.0.2
+# South==1.0.2
 splinter==0.7.2
 sqlparse==0.1.15
 titlecase==0.7.2
