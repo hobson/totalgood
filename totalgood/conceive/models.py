@@ -11,10 +11,23 @@ from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from sorl.thumbnail import get_thumbnail
 from utils.slughifi import unique_slug, slughifi
-from main_site.models import BaseModel
+
+ENTITY_REGEX = re.compile("&[^\s]*;")
+BIG_QUOTE = 1
+PHOTO_WITH_CAPTION = 2
+ARTICLE_SINGLE_IMAGE = 3
+ARTICLE_MULTIPLE_IMAGES = 4
+BODY_WITH_NO_TITLE = 5
+POST_TYPES = [
+    (BIG_QUOTE, "Big Quote"),
+    (PHOTO_WITH_CAPTION, "Photo with caption"),
+    (ARTICLE_SINGLE_IMAGE, "Article and a Single Image"),
+    (ARTICLE_MULTIPLE_IMAGES, "Article and a multiple images"),
+    (BODY_WITH_NO_TITLE, "Body with no real title"),
+]
 
 
-class DatedModel(models.Model):
+class TimetaggedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -56,7 +69,7 @@ class Weather(models.Model):
     wind_speed_kph = models.IntegerField(blank=True, null=True)
 
 
-class Contributor(BaseModel):
+class Contributor(TimetaggedModel):
     user = models.ForeignKey(User, blank=True, null=True)
     premium_user = models.BooleanField(default=False)
     slug = models.CharField(max_length=255, blank=True, editable=False)
@@ -95,7 +108,7 @@ class Contributor(BaseModel):
         if not self.archive and not self.user:
             raise RuntimeError("user is missing, and author is not an archive")
         self.slug = unique_slug(self, 'name', 'slug')
-        super(Author, self).save(*args, **kwargs)
+        super(Contributor, self).save(*args, **kwargs)
 
     @property
     def published_posts(self):
@@ -180,8 +193,8 @@ class Contributor(BaseModel):
         return "%s" % self.name
 
 
-class Collection(BaseModel):
-    author = models.ForeignKey(Author)
+class Collection(TimetaggedModel):
+    author = models.ForeignKey(Contributor)
     title = models.TextField(blank=True, null=True)
     slug = models.CharField(max_length=800, blank=True, editable=False)
 
@@ -193,8 +206,8 @@ class Collection(BaseModel):
         return "%s" % self.title
 
 
-class AbstractConcept(BaseModel):
-    author = models.ForeignKey(Author)
+class AbstractConcept(TimetaggedModel):
+    author = models.ForeignKey(Contributor)
     title = models.TextField(blank=True, null=True, default="Title")
     body = models.TextField(blank=True, null=True, default="Body")
     title_html = models.TextField(blank=True, null=True, editable=False)
@@ -472,7 +485,7 @@ class ConceptRevision(AbstractConcept):
         return "%s (%s)" % (self.title, self.revised_at)
 
 
-class ConceptImage(BaseModel):
+class ConceptImage(TimetaggedModel):
     post = models.ForeignKey(Concept)
     image = models.ImageField(upload_to="post_images", blank=True, null=True)
     image_url = models.TextField(blank=True, null=True)
@@ -508,21 +521,21 @@ class ConceptImage(BaseModel):
             self.blog_size_url = get_thumbnail(self.image, '1792', quality=90).url.split("?")[0]
             self.save()
 
-class Fantastic(BaseModel):
+class Fantastic(TimetaggedModel):
     post = models.ForeignKey(Concept)
     uuid = models.CharField(max_length=500, blank=True, null=True)
     marked_at = models.DateTimeField(auto_now_add=True, editable=False)
     on = models.BooleanField(default=True)
 
-    reader = models.ForeignKey(Author, blank=True, null=True)
+    reader = models.ForeignKey(Contributor, blank=True, null=True)
 
 
-class Read(BaseModel):
+class Read(TimetaggedModel):
     post = models.ForeignKey(Concept)
     uuid = models.CharField(max_length=500, blank=True, null=True)
     read_at = models.DateTimeField(auto_now_add=True, editable=False)
 
-    reader = models.ForeignKey(Author, blank=True, null=True)
+    reader = models.ForeignKey(Contributor, blank=True, null=True)
 
     @property
     def fantasticed_this_post(self):
@@ -531,8 +544,8 @@ class Read(BaseModel):
     # class Meta:
     #     ordering = ("-read_at",)
 
-class Backup(BaseModel):
-    author = models.ForeignKey(Author)
+class Backup(TimetaggedModel):
+    author = models.ForeignKey(Contributor)
     zip_file = models.FileField(upload_to="backups", blank=True, null=True)
     backup_at = models.DateTimeField(blank=True, null=True, editable=False, auto_now_add=True)
     num_posts = models.IntegerField(default=0)
@@ -543,8 +556,8 @@ class Backup(BaseModel):
     class Meta:
         ordering = ("-backup_at",)
 
-class Redirect(BaseModel):
-    author = models.ForeignKey(Author)
+class Redirect(TimetaggedModel):
+    author = models.ForeignKey(Contributor)
     old_url = models.CharField(max_length=600, blank=True, null=True)
     new_url = models.CharField(max_length=600, blank=True, null=True)
 
@@ -552,8 +565,8 @@ class Redirect(BaseModel):
 # def create_user_profile(sender, instance, created, **kwargs):
 #     print sender
 #     print kwargs
-#     if created and not Author.objects.filter(user=instance).count() > 0:
+#     if created and not Contributor.objects.filter(user=instance).count() > 0:
 
-#         Author.objects.create(user=instance)
+#         Contributor.objects.create(user=instance)
 
 # post_save.connect(create_user_profile, sender=User, dispatch_uid="create_user_profile")
