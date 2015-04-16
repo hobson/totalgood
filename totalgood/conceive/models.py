@@ -229,10 +229,9 @@ class AbstractConcept(TimetaggedModel):
     dayone_image_blog_size_url = models.TextField(blank=True, null=True)
     dayone_image_thumb_size_url = models.TextField(blank=True, null=True)
 
-    location = ForeignKey(Location, null=True)
+    location = models.ForeignKey(Location, null=True)
 
-    weather = ForeignKey(Weather, null=True) 
-
+    weather = models.ForeignKey(Weather, null=True)
 
     twitter_publish_intent = models.BooleanField(default=True)
     twitter_include_image = models.BooleanField(default=True)
