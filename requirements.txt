@@ -48,6 +48,8 @@ nose
 oauthlib
 paramiko
 psycopg2
+pug-ann
+pug-nlp
 pycrypto
 pyembed
 pyembed-markdown
