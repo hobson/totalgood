@@ -12,15 +12,25 @@ A webapp for collecting and prioritizing ideas.
 
 ### Fedora
 
-If you're on Fedora >= 16 but haven't used the django ORM with a postgres database before, then you'll need to install some binary packages:
+If you're on Fedora >= 16 but haven't used the django ORM with a postgres database or played around with ipython notebooks and scikit learn, then you'll need to install some binary packages in your OS:
 
+    # for the postrgres database ORM in Django
     sudo yum install -y postgresql postgresql-server postgresql-libs postgresql-devel
+    # for some Django extensions and packages
+    sudo yum install sudo yum install -y readline-devel libmemcached libmemcached-devel
+    # for pug (machine learning)
+    sudo yum install -y python-devel libxml2-devel libxslt-devel gcc-gfortran python-scikit-learn 
 
 Then download the latest source code:
 
     git clone https://github.com/hobson/totalgood.git
 
-And run a development webserver
+Install some pretty extensive dependencies (this will be the hard part):
+
+    cd totalgood
+    pip install requirements.txt --allow-external pybrain --allow-external pug-nlp
+
+Now if you're lucky and everything installed, you can migrate to an empty database and run a development webserver
 
     cd totalgood/totalgood
     manage.py migrate
