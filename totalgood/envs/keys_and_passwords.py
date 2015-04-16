@@ -19,9 +19,10 @@ except:
 
 from os import environ
 
-def set_env_fallback(key):
 
-    if (key not in globals() or globals()[key] is None) and key in environ:
+def set_env_fallback(key):
+    """Set credentials in global python variables, using the os env value if it's not set above."""
+    if not globals().get(key) and key in environ:
         globals()[key] = environ[key]
 
 set_env_fallback("AWS_ACCESS_KEY_ID")
