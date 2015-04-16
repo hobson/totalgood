@@ -45,8 +45,6 @@ oauthlib==0.7.2
 paramiko==1.15.2
 Pillow==2.8.1
 psycopg2==2.6
-pug-ann
-pug-nlp
 pycrypto==2.6.1
 pyembed==1.1.2
 pyembed-markdown==1.1.0
