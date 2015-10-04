@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'home',
-    'conceive',
+    #'conceive',
+    'pacs',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -78,9 +79,17 @@ WSGI_APPLICATION = 'totalgood.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'totalgood': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+    'default': {  # hackor db on laptop
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'totalgood',
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': os.getenv('HACKOR_PG_PW')
     }
 }
 
