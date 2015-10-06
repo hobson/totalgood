@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 
 # import pacs.urls
 from pacs import views
-import home.views
+# import home.views
 
 admin.autodiscover()
 
@@ -23,8 +23,7 @@ urlpatterns = [
     url(r'^', include(router.urls)),
 ]
 
-
-# urlpatterns = patterns('',
+# urlpatterns += patterns('',
 #     # Examples:
 #     # url(r'^$', 'hackor.views.home', name='home'),
 #     # url(r'^blog/', include('blog.urls')),
