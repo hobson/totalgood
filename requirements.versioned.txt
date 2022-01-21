@@ -36,7 +36,7 @@ facepy==1.0.6
 gnureadline==6.3.3
 gunicorn==19.3.0
 html5lib==0.999
-ipython==3.1.0
+ipython==7.16.3
 kombu==3.0.24
 Markdown==2.6.1
 newrelic==2.50.0.39
